@@ -24,9 +24,9 @@ public final class EventsListener implements Listener {
 
 	@EventHandler
 	public void onPlayerThrow(PlayerInteractEvent event) {
-		
-		if (event.getAction() == Action.RIGHT_CLICK_AIR) {
 
+		if (event.getAction() == Action.RIGHT_CLICK_AIR) {
+			if (event.getItem() != null && event.getItem().getType() == Material.BLAZE_ROD) {
 				Player p = event.getPlayer();
 				Projectile fireball;
 				int fb_speed = 1;
@@ -35,7 +35,7 @@ public final class EventsListener implements Listener {
 				fireball = p.getWorld().spawn(p.getEyeLocation().add(fb_direction.getX(), fb_direction.getY(), fb_direction.getZ()), Fireball.class);
 				fireball.setShooter((ProjectileSource) p);
 				fireball.setVelocity(fb_direction);
-
+			}
 		}
 	}
 }
