@@ -1,20 +1,21 @@
 package ro.coderdojo.dormeo;
 
-import java.util.logging.Level;
+import org.bukkit.Difficulty;
+import org.bukkit.World;
+import org.bukkit.WorldCreator;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.plugin.PluginManager;
-import ro.coderdojo.dormeo.CoderDojoCommand;
-import ro.coderdojo.dormeo.EventsListener;
 
 public class Main extends JavaPlugin {
 
+	World world;
+	
     @Override
     public void onEnable() {
-		//Register Event Listeners
-		getServer().getPluginManager().registerEvents(new EventsListener(), this);
+		getServer().getPluginManager().registerEvents(new EventsListener(this), this);
+		world = this.getServer().createWorld(new WorldCreator("wow_world"));
+		world.setGameRuleValue("doMobSpawning", "false");
+		world.setDifficulty(Difficulty.HARD);
 		
-		//Register Command Executors
-		this.getCommand("CoderDojo").setExecutor(new CoderDojoCommand());
     }
 
 }
