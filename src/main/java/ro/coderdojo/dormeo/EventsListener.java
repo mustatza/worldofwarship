@@ -8,6 +8,7 @@ import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Fireball;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
@@ -17,6 +18,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.CreatureSpawnEvent;
+import org.bukkit.event.entity.EntityExplodeEvent;
+import org.bukkit.event.entity.ExplosionPrimeEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
@@ -186,6 +189,24 @@ public final class EventsListener implements Listener {
 		event.getPlayer().getInventory().addItem(new ItemStack(Material.BOAT, 1));
 		AttributeInstance healthAttribute = event.getPlayer().getAttribute(Attribute.GENERIC_MAX_HEALTH);
 		healthAttribute.setBaseValue(10.00);
+	}
+	
+	@EventHandler
+	public void onEntityExplode(EntityExplodeEvent event) {
+		Entity entity = event.getEntity();
+		if(entity instanceof Fireball) {
+			event.setCancelled(true);
+		}
+	}
+	
+	@EventHandler
+	public void onExplosionPrime(ExplosionPrimeEvent event) {
+		event.setFire(false);
+		
+		Entity entity = event.getEntity();
+		if(entity instanceof Fireball) {
+			event.setRadius(2);
+		}
 	}
 
 }
