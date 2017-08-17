@@ -18,6 +18,7 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.projectiles.ProjectileSource;
 import org.bukkit.util.Vector;
@@ -70,6 +71,35 @@ public final class EventsListener implements Listener {
 	public void onCreatureSpawn(CreatureSpawnEvent event) {
 		event.setCancelled(true);
 		event.getEntity().remove();
+	}
+
+	@EventHandler
+	public void onPlayerInteract(PlayerInteractEvent event) {
+		Player player = event.getPlayer();
+		Action action = event.getAction();
+		if (event.getClickedBlock() == null) {
+			return;
+		}
+
+		Material material = event.getClickedBlock().getState().getType();
+		Location location = event.getClickedBlock().getState().getLocation();
+		if (action == Action.RIGHT_CLICK_BLOCK && material == Material.STONE_BUTTON) {
+			System.out.println("Click: " + location);
+			
+			Location button1 = new Location(plugin.world, 926.0, 38.0, 943.0, location.getYaw(), location.getPitch());
+			Location button2 = new Location(plugin.world, 922.0, 38.0, 943.0, location.getYaw(), location.getPitch());
+			if (location.equals(button2)) {
+				player.teleport(new Location(plugin.world, 958.451, 65, 945.386));
+			}
+			if (location.equals(button1)) {
+				player.teleport(new Location(plugin.world, 886.559, 65, 943.310));
+			}
+		}
+	}
+
+	@EventHandler
+	public void onPlayerRespawn(PlayerRespawnEvent event) {
+		event.setRespawnLocation(new Location(plugin.world, 924.562, 37.00000, 941.547));
 	}
 
 }
