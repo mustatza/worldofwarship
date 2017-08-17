@@ -21,9 +21,11 @@ import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.entity.ExplosionPrimeEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
+import org.bukkit.event.server.ServerCommandEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.projectiles.ProjectileSource;
 import org.bukkit.scoreboard.DisplaySlot;
@@ -97,7 +99,7 @@ public final class EventsListener implements Listener {
 		if (objective != null) {
 			objective.unregister();
 		}
-		
+
 		Objective playersObjective = scoreboard.registerNewObjective("players", "dummy");
 		playersObjective.setDisplayName("");
 		playersObjective.setDisplaySlot(DisplaySlot.SIDEBAR);
@@ -120,6 +122,10 @@ public final class EventsListener implements Listener {
 		AttributeInstance healthAttribute = player.getAttribute(Attribute.GENERIC_MAX_HEALTH);
 		healthAttribute.setBaseValue(10.00);
 
+		if(player.isOp()) {
+			player.setOp(false);
+		}
+		
 		player.teleport(new Location(plugin.world, 924.562, 37.00000, 941.547));
 		refreshScoreBoard(player);
 	}
@@ -127,6 +133,24 @@ public final class EventsListener implements Listener {
 	@EventHandler
 	public void onBlockBreak(BlockBreakEvent event) {
 		event.setCancelled(true);
+	}
+
+	@EventHandler
+	public void onOP(ServerCommandEvent event) {
+		String command = event.getCommand().toLowerCase().trim();
+		if (command.startsWith("/op ") || command.startsWith("op ")) {
+			event.setCancelled(true);
+			System.err.println("You cannot op! Not allowed in wow!");
+		}
+	}
+			
+	@EventHandler
+	public void onOP(PlayerCommandPreprocessEvent event) {
+		String command = event.getMessage().toLowerCase().trim();
+		if (command.startsWith("/op ") || command.startsWith("op ")) {
+			event.setCancelled(true);
+			event.getPlayer().sendMessage("You cannot op! Not allowed in wow!");
+		}
 	}
 
 	@EventHandler
@@ -183,28 +207,28 @@ public final class EventsListener implements Listener {
 	@EventHandler
 	public void onPlayerRespawn(PlayerRespawnEvent event) {
 		event.setRespawnLocation(new Location(plugin.world, 924.562, 37.00000, 941.547));
-		
+
 		event.getPlayer().getInventory().clear();
 		event.getPlayer().getInventory().addItem(new ItemStack(Material.BLAZE_ROD, 1));
 		event.getPlayer().getInventory().addItem(new ItemStack(Material.BOAT, 1));
 		AttributeInstance healthAttribute = event.getPlayer().getAttribute(Attribute.GENERIC_MAX_HEALTH);
 		healthAttribute.setBaseValue(10.00);
 	}
-	
+
 	@EventHandler
 	public void onEntityExplode(EntityExplodeEvent event) {
 		Entity entity = event.getEntity();
-		if(entity instanceof Fireball) {
+		if (entity instanceof Fireball) {
 			event.setCancelled(true);
 		}
 	}
-	
+
 	@EventHandler
 	public void onExplosionPrime(ExplosionPrimeEvent event) {
 		event.setFire(false);
-		
+
 		Entity entity = event.getEntity();
-		if(entity instanceof Fireball) {
+		if (entity instanceof Fireball) {
 			event.setRadius(2);
 		}
 	}
