@@ -180,6 +180,12 @@ public final class EventsListener implements Listener {
 	@EventHandler
 	public void onPlayerRespawn(PlayerRespawnEvent event) {
 		event.setRespawnLocation(new Location(plugin.world, 924.562, 37.00000, 941.547));
+		
+		event.getPlayer().getInventory().clear();
+		event.getPlayer().getInventory().addItem(new ItemStack(Material.BLAZE_ROD, 1));
+		event.getPlayer().getInventory().addItem(new ItemStack(Material.BOAT, 1));
+		AttributeInstance healthAttribute = event.getPlayer().getAttribute(Attribute.GENERIC_MAX_HEALTH);
+		healthAttribute.setBaseValue(10.00);
 	}
 
 }
