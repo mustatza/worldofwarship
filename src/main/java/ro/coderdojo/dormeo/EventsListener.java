@@ -11,9 +11,11 @@ import org.bukkit.entity.Fireball;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.ItemStack;
@@ -46,7 +48,7 @@ public final class EventsListener implements Listener {
 	public void onBlockBreak(BlockBreakEvent event) {
 		event.setCancelled(true);
 	}
-	
+
 	@EventHandler
 	public void onPlayerThrow(PlayerInteractEvent event) {
 
@@ -62,6 +64,12 @@ public final class EventsListener implements Listener {
 				fireball.setVelocity(fb_direction);
 			}
 		}
+	}
+
+	@EventHandler(priority = EventPriority.HIGHEST)
+	public void onCreatureSpawn(CreatureSpawnEvent event) {
+		event.setCancelled(true);
+		event.getEntity().remove();
 	}
 
 }
