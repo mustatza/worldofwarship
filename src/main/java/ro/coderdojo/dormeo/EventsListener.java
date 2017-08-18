@@ -1,5 +1,7 @@
 package ro.coderdojo.dormeo;
 
+import java.util.Hashtable;
+import java.util.Map;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
@@ -41,6 +43,8 @@ public final class EventsListener implements Listener {
 
 	int redKills = 0;
 	int blueKills = 0;
+	
+	Map<String, Long> lastFire = new Hashtable<>();
 
 	public EventsListener(Main plugin) {
 		this.plugin = plugin;
@@ -159,6 +163,13 @@ public final class EventsListener implements Listener {
 		if (event.getAction() == Action.RIGHT_CLICK_AIR) {
 			if (event.getItem() != null && event.getItem().getType() == Material.BLAZE_ROD) {
 				Player p = event.getPlayer();
+				Long lastFireTimestamp = lastFire.get(p.getName());
+				if(lastFireTimestamp != null) {
+					if(System.currentTimeMillis() - lastFireTimestamp < 1000) {
+						return;
+					}
+				}
+				
 				Projectile fireball;
 				int fb_speed = 1;
 				final Vector fb_direction = p.getEyeLocation().getDirection().multiply(fb_speed);
@@ -166,6 +177,7 @@ public final class EventsListener implements Listener {
 				fireball = p.getWorld().spawn(p.getEyeLocation().add(fb_direction.getX(), fb_direction.getY(), fb_direction.getZ()), Fireball.class);
 				fireball.setShooter((ProjectileSource) p);
 				fireball.setVelocity(fb_direction);
+				lastFire.put(p.getName(), System.currentTimeMillis());
 			}
 		}
 	}
