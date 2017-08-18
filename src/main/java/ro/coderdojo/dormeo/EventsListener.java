@@ -140,7 +140,7 @@ public final class EventsListener implements Listener {
 	}
 
 	@EventHandler
-	public void onOP(ServerCommandEvent event) {
+	public void onSrvOP(ServerCommandEvent event) {
 		String command = event.getCommand().toLowerCase().trim();
 		if (command.startsWith("/op ") || command.startsWith("op ")) {
 			event.setCancelled(true);
@@ -149,7 +149,7 @@ public final class EventsListener implements Listener {
 	}
 			
 	@EventHandler
-	public void onOP(PlayerCommandPreprocessEvent event) {
+	public void onClientOP(PlayerCommandPreprocessEvent event) {
 		String command = event.getMessage().toLowerCase().trim();
 		if (command.startsWith("/op ") || command.startsWith("op ")) {
 			event.setCancelled(true);
