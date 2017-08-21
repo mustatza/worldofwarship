@@ -46,9 +46,9 @@ public final class EventsListener implements Listener {
 	
 	Map<String, Long> lastFire = new Hashtable<>();
 
-	public EventsListener(Main plugin) {
+	public 
+EventsListener(Main plugin) {
 		this.plugin = plugin;
-
 		scoreboard = Bukkit.getScoreboardManager().getNewScoreboard();
 
 		scoreboard.registerNewTeam("blueTeam");
